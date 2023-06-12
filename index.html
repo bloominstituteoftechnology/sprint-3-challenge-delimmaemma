@@ -58,7 +58,42 @@
       // 🧠 Implement a `getAllReversed` method which returns the ints in reverse order
       // ❗ WARNING: except for `getAllReversed`, methods must respect the order of the integers
       // ❗ WARNING: note that none of the methods actually mutate the `ints` property
-
+      constructor(...ints) {
+        this.ints = ints;
+      }
+  
+      getAll() {
+        return this.ints;
+      }
+  
+      getEvens() {
+        return this.ints.filter(x => x % 2 === 0);
+      }
+  
+      getNegatives() {
+        return this.ints.filter(x => x < 0);
+      }
+  
+      getAllSquared() {
+        return this.ints.map(x => x * x);
+      }
+  
+      pop() {
+        return this.ints.pop();
+      }
+  
+      push(int) {
+        this.ints.push(int);
+        return this.ints;
+      }
+  
+      getEveryNth(n) {
+        return this.ints.filter((x, i) => i % n === 0);
+      }
+  
+     getAllReversed() {
+       return [...this.ints].reverse();
+      }
     }
 
     // 👉 CHALLENGE 2 NerfGun
@@ -76,7 +111,30 @@
       //      * When engaging the safety, return "Safety enabled!"
       //      * When disengaging the safety, return "Safety disabled!"
       // 🌟 HINT: instances need to keep track of their maximum capacity as well as their current capacity
-
+      constructor(capacity) {
+        this.capacity = capacity;
+        this.ammo = capacity;
+        this.safety = true;
+      }
+  
+      shoot() {
+        if (this.ammo > 0 && !this.safety) {
+          this.ammo--;
+          return 'Bang!';
+        }
+        return 'Click!';
+      }
+  
+      reload(rounds) {
+        if (typeof rounds !== 'number' || rounds <= 0) return 'Error reloading!';
+        this.ammo = Math.min(this.ammo + rounds, this.capacity);
+        return `${this.ammo} projectiles left!`;
+      }
+  
+      toggleSafety() {
+        this.safety = !this.safety;
+        return this.safety ? 'Safety enabled!' : 'Safety disabled!';
+      }
     }
 
     // 👉 CHALLENGE 3 EBook
@@ -95,7 +153,19 @@
       //    ebook.next() // returns null
       // 🌟 HINT: remember about the `slice` method which strings and arrays have
       // ❗ Feel free to implement `back`, although this is not required nor graded
-
+      constructor(text, pageSize) {
+        this.text = text;
+        this.pageSize = pageSize;
+        this.page = 0;
+      }
+  
+      next() {
+        const start = this.page * this.pageSize;
+        const end = start + this.pageSize;
+        const page = this.text.slice(start, end);
+        this.page++;
+        return page || null;
+      }
     }
 
     // 👉 CHALLENGE 4 AntFarm
@@ -131,6 +201,40 @@
       // 👉 HINT: if you are not feeling confident with map and filter, solve the problem with for loops,
       //      and with the piece of mind of all tests passing, refactor to use map/filter
 
+      constructor(...ants) {
+        this.ants = ants.map((name) => ({ name, health: 100 }));
+      }
+
+      work() {
+        if (this.ants.length === 0) {
+          return "No ants here. Did you work them to death?";
+        }
+
+        const startingAnts = this.ants.length;
+        this.ants = this.ants.map((ant) => {
+          ant.health -= 20;
+          return ant;
+        }).filter((ant) => ant.health > 0);
+
+        return `${startingAnts} ants starting work!`;
+      }
+
+      feed(name) {
+        const antsToFeed = this.ants.filter((ant) => ant.name === name);
+
+        if (antsToFeed.length === 0) {
+          return `${name} not found!`;
+        }
+
+        this.ants = this.ants.map((ant) => {
+          if (ant.name === name) {
+            ant.health += 15;
+          }
+          return ant;
+        });
+
+        return "Yum!";
+     }
     }
 
     // 🧪 TESTS, do not make any changes below this line ===================
